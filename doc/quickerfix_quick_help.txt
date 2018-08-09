@@ -1,15 +1,15 @@
 =========  quickerfix quick help =========
-  *↳:*  Open selected result
-  *o:*  Open, keep focus on results
-  *O:*  Open, close the results
-  *t:*  Open in new tab
-  *T:*  Open in new tab, keep focus on results
-  *h:*  Open in h-split
- *gh:*  Open in h-split, keep focus on results
-  *v:*  Open in v-split
- *gv:*  Open in v-split, keep focus on results
-  *[:*  Go to older error list
-  *]:*  Go to newer error list
-  *q:*  Close the results window
-  *?:*  Toggle this help menu
+  ↵  Open selected result
+  *o*  Open, keep focus on results
+  *O*  Open, close the results
+  *t*  Open in new tab
+  *T*  Open in new tab, keep focus on results
+  *h*  Open in h-split
+ *gh*  Open in h-split, keep focus on results
+  *v*  Open in v-split
+ *gv*  Open in v-split, keep focus on results
+  *[*  Go to older error list
+  *]*  Go to newer error list
+  *q*  Close the results window
+  *?*  Toggle this help menu
 ==========================================
