@@ -15,14 +15,17 @@ if !exists("s:quickerfix_hotkeys")
                 \ "T": "<C-W><CR><C-W>TgT<C-W>j",
                 \ "h": ":aboveleft split+<C-R>=line('.')<CR>cc<CR>",
                 \ "gh": ":aboveleft split+<C-R>=line('.')<CR>cc<CR><C-W>p",
+                \ "ih": ":let bnqf=winnr('#')<CR><C-W><CR>:call win_splitmove(winnr(), <C-r>=bnqf<CR>)<CR>",
+                \ "gih": ":let bnqf=winnr('#')<CR><C-W><CR>:call win_splitmove(winnr(), <C-r>=bnqf<CR>)<CR>:copen<CR>",
                 \ "v": "<C-W><CR><C-W>L<C-W>p<C-W>J<C-W>p",
                 \ "gv": "<C-W><CR><C-W>L<C-W>p<C-W>J",
+                \ "iv": ":let bnqf=winnr('#')<CR><C-W><CR>:call win_splitmove(winnr(), <C-r>=bnqf<CR>, { 'vertical' : 1 })<CR>",
+                \ "giv": ":let bnqf=winnr('#')<CR><C-W><CR>:call win_splitmove(winnr(), <C-r>=bnqf<CR>, { 'vertical' : 1 })<CR>:copen<CR>",
                 \ "[": ":colder<CR>",
                 \ "]": ":cnewer<CR>",
                 \ "q": ":cclose<CR>",
                 \ "?": ":call <SID>quickerfixHelp()<CR>" }
 
-    " https://github.com/vim/vim/pull/3220 for better v/gv implementation
     let s:quickerfix_loc_hotkeys = {
                 \ "o": "<CR><C-W>p",
                 \ "O": "<CR>:lclose<CR>",
@@ -30,8 +33,12 @@ if !exists("s:quickerfix_hotkeys")
                 \ "T": "<C-W><CR><C-W>TgT<C-W>j",
                 \ "h": ":aboveleft split+<C-R>=line('.')<CR>ll<CR>",
                 \ "gh": ":aboveleft split+<C-R>=line('.')<CR>ll<CR><C-W>p",
+                \ "ih": ":let bnqf=winnr('#')<CR><C-W><CR>:call win_splitmove(winnr(), <C-r>=bnqf<CR>)<CR>",
+                \ "gih": ":let bnqfll=win_getid()<CR>:let bnqf=winnr('#')<CR><C-W><CR>:call win_splitmove(winnr(), <C-r>=bnqf<CR>)<CR>:call win_gotoid(<C-r>=bnqfll<CR>)<CR>",
                 \ "v": "<C-W><CR>:let bnqf=bufnr('%')<CR>:hide<CR><C-W>p<C-W>k:vert sb <C-r>=bnqf<CR><CR><C-W>j<CR>",
                 \ "gv": "<C-W><CR>:let bnqf=bufnr('%')<CR>:hide<CR><C-W>p<C-W>k:vert sb <C-r>=bnqf<CR><CR><C-W>j<CR><C-W>p",
+                \ "iv": ":let bnqf=winnr('#')<CR><C-W><CR>:call win_splitmove(winnr(), <C-r>=bnqf<CR>, { 'vertical' : 1 })<CR>",
+                \ "giv": ":let bnqfll=win_getid()<CR>:let bnqf=winnr('#')<CR><C-W><CR>:call win_splitmove(winnr(), <C-r>=bnqf<CR>, { 'vertical' : 1 })<CR>:call win_gotoid(<C-r>=bnqfll<CR>)<CR>",
                 \ "[": ":lolder<CR>",
                 \ "]": ":lnewer<CR>",
                 \ "q": ":lclose<CR>",

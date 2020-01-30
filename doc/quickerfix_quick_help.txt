@@ -6,8 +6,12 @@
   *T*  Open in new tab, keep focus on results
   *h*  Open in h-split
  *gh*  Open in h-split, keep focus on results
+ *ih*  Insert as h-split
+*gih*  Insert as h-split, keep focus on results
   *v*  Open in v-split
  *gv*  Open in v-split, keep focus on results
+ *iv*  Insert as v-split
+*giv*  Insert as v-split, keep focus on results
   *[*  Go to older error list
   *]*  Go to newer error list
   *q*  Close the results window
