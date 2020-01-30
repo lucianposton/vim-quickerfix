@@ -15,12 +15,12 @@ if !exists("s:quickerfix_hotkeys")
                 \ "T": "<C-W><CR><C-W>TgT<C-W>j",
                 \ "h": ":aboveleft split+<C-R>=line('.')<CR>cc<CR>",
                 \ "gh": ":aboveleft split+<C-R>=line('.')<CR>cc<CR><C-W>p",
-                \ "ih": ":let bnqf=winnr('#')<CR><C-W><CR>:call win_splitmove(winnr(), <C-r>=bnqf<CR>)<CR>",
-                \ "gih": ":let bnqf=winnr('#')<CR><C-W><CR>:call win_splitmove(winnr(), <C-r>=bnqf<CR>)<CR>:copen<CR>",
+                \ "ih": ":call <SID>splitMove(0,0,0)<CR>",
+                \ "gih": ":call <SID>splitMove(0,1,0)<CR>",
                 \ "v": "<C-W><CR><C-W>L<C-W>p<C-W>J<C-W>p",
                 \ "gv": "<C-W><CR><C-W>L<C-W>p<C-W>J",
-                \ "iv": ":let bnqf=winnr('#')<CR><C-W><CR>:call win_splitmove(winnr(), <C-r>=bnqf<CR>, { 'vertical' : 1 })<CR>",
-                \ "giv": ":let bnqf=winnr('#')<CR><C-W><CR>:call win_splitmove(winnr(), <C-r>=bnqf<CR>, { 'vertical' : 1 })<CR>:copen<CR>",
+                \ "iv": ":call <SID>splitMove(1,0,0)<CR>",
+                \ "giv": ":call <SID>splitMove(1,1,0)<CR>",
                 \ "[": ":colder<CR>",
                 \ "]": ":cnewer<CR>",
                 \ "q": ":cclose<CR>",
@@ -33,16 +33,47 @@ if !exists("s:quickerfix_hotkeys")
                 \ "T": "<C-W><CR><C-W>TgT<C-W>j",
                 \ "h": ":aboveleft split+<C-R>=line('.')<CR>ll<CR>",
                 \ "gh": ":aboveleft split+<C-R>=line('.')<CR>ll<CR><C-W>p",
-                \ "ih": ":let bnqf=winnr('#')<CR><C-W><CR>:call win_splitmove(winnr(), <C-r>=bnqf<CR>)<CR>",
-                \ "gih": ":let bnqfll=win_getid()<CR>:let bnqf=winnr('#')<CR><C-W><CR>:call win_splitmove(winnr(), <C-r>=bnqf<CR>)<CR>:call win_gotoid(<C-r>=bnqfll<CR>)<CR>",
-                \ "v": "<C-W><CR>:let bnqf=bufnr('%')<CR>:hide<CR><C-W>p<C-W>k:vert sb <C-r>=bnqf<CR><CR><C-W>j<CR>",
-                \ "gv": "<C-W><CR>:let bnqf=bufnr('%')<CR>:hide<CR><C-W>p<C-W>k:vert sb <C-r>=bnqf<CR><CR><C-W>j<CR><C-W>p",
-                \ "iv": ":let bnqf=winnr('#')<CR><C-W><CR>:call win_splitmove(winnr(), <C-r>=bnqf<CR>, { 'vertical' : 1 })<CR>",
-                \ "giv": ":let bnqfll=win_getid()<CR>:let bnqf=winnr('#')<CR><C-W><CR>:call win_splitmove(winnr(), <C-r>=bnqf<CR>, { 'vertical' : 1 })<CR>:call win_gotoid(<C-r>=bnqfll<CR>)<CR>",
+                \ "ih": ":call <SID>splitMove(0,0,0)<CR>",
+                \ "gih": ":call <SID>splitMove(0,1,0)<CR>",
+                \ "v": ":call <SID>splitMove(1,0,'k')<CR>",
+                \ "gv": ":call <SID>splitMove(1,1,'k')<CR>",
+                \ "iv": ":call <SID>splitMove(1,0,0)<CR>",
+                \ "giv": ":call <SID>splitMove(1,1,0)<CR>",
                 \ "[": ":lolder<CR>",
                 \ "]": ":lnewer<CR>",
                 \ "q": ":lclose<CR>",
                 \ "?": ":call <SID>quickerfixHelp()<CR>" }
+
+    function s:splitMove(vertical, keep_qf_active, split_dir) abort
+        if !has("patch-8.1.2020")
+            echoerr "vim-8.1.2020 or later is required for this function"
+            return
+        endif
+        let l:flags = {}
+        let l:flags.vertical = a:vertical
+        let l:last_win_id=win_getid(winnr('#'))
+        let l:qf_win_id=win_getid()
+        exec "normal! \<C-W>\<CR>"
+        if empty(a:split_dir)
+            call win_splitmove(winnr(), win_id2win(l:last_win_id), l:flags)
+        else
+            let l:target_win = winnr(a:split_dir)
+            if l:target_win == 0 || l:target_win == winnr()
+                " new window will appear above, and since we only need to
+                " handle a:split_dir=='k' for now, noop
+            else
+                call win_splitmove(winnr(), l:target_win, l:flags)
+            endif
+        endif
+        let l:new_win_id=win_getid()
+        if a:keep_qf_active
+            call win_gotoid(l:last_win_id)
+            call win_gotoid(l:qf_win_id)
+        else
+            call win_gotoid(l:qf_win_id)
+            call win_gotoid(l:new_win_id)
+        endif
+    endfunction
 
     function s:isLoclist(...) abort
         let l:winnr = a:0 ? a:1 : winnr()
